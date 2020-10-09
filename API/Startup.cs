@@ -32,6 +32,13 @@ namespace API
                 opt.UseSqlite(Configuration.GetConnectionString("DefaulConnection"));
             }
             );
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                   policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                });
+            }); //para que del local host el API y la aplicacion de react se puedan comunicar
             services.AddControllers();
         }
 
@@ -48,7 +55,7 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseCors("CorsPolicy"); // comunicacion 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
