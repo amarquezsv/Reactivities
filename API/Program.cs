@@ -10,8 +10,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddCors();
 
 var app = builder.Build();
+
+// Para que se pueda acceder a la API desde un cliente en otro dominio
+app.UseCors(options =>
+{
+    options.WithOrigins("http://localhost:3000","https://localhost:3000");
+    options.AllowAnyMethod();
+    options.AllowAnyHeader();
+});
 
 // Configure the HTTP request pipeline.
 app.MapControllers();
